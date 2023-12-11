@@ -1,3 +1,8 @@
+This project, named AutoVQE, is a Python-based application designed for video quality enhancement. It utilizes two main libraries, automm and autovqe, which need to be installed for the project to function properly.
+
+Include the official implementation of "Video Compression Artifact Reduction by Fusing Motion Compensation and Global Context in a Swin-CNN based Parallel Architecture
+" (AAAI'23)
+
 ## Getting started
 ```python
 #install automm
