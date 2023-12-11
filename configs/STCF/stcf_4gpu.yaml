@@ -1,0 +1,80 @@
+_BASE_: /DATA/bvac/personal/AutoVQE/configs/base.yaml
+VERSION: 1
+
+EXP_NAME: STCF-FULL-QP37-R5-Crop64-16B-128F-8Win 
+LOG_DIR: /DATA/bvac/personal/AutoVQE/log
+
+DATASETS:
+  TRAIN: MFQEV2_TRAIN
+  TEST: MFQEV2_TEST
+  # The test batch size must be 1 per GPU. 4 for 4 GPUs, etc. 
+  # The final batch size is controlled by the 'TEST_FLOAT_BATCH' 
+  #  in the dataset config.
+  TEST_BATCH: 4  
+  
+  MFQEV2:
+    DATA_ROOT: /workspace/datasets/mfqe_frames
+    PAIRED_CROP_SIZE: 64
+    QP: QP37
+    RADIUS: 5
+    USE_FLIP: True
+    USE_ROT: True
+    # For different resolutions videos, the batchsize is floating
+    # The order is from low to high.
+    # resolution: batch size, number of frames
+    # '416': 19, 1900 ; '832':  10, 1900; 
+    # '1280': 4, 1800 ; '1920': 2, 2080;  '2560': 1 ,300
+    TEST_FLOAT_BATCH: (19, 10, 4, 2, 1) 
+
+MODEL:
+  BACKBONE:
+    NAME: build_pscf_qe_backbone
+  DEVICE: cuda
+  META_ARCHITECTURE: STCF
+  PSCF:
+    DROP_PATH: 0.2
+    IN_NC: 64
+    MODE: fusion
+    NB: 16
+    NF: 128
+    OUT_NC: 1
+    WIN_SIZE: 8
+  STCFNET:
+    BASE_KS: 3
+    DEFORM_KS: 3
+    ENABLE_FFT: False
+    IN_NC: 1
+    ST_NB: 3
+    ST_NF: 32
+    ST_OUT_NC: 64
+  WEIGHTS: ''
+
+SOLVER:
+  SAMPLE_PER_BATCH: 128
+  MAX_ITER: 2250000
+  CHECKPOINT_PERIOD: 15000
+    
+  BASE_LR : 0.0001
+
+  LR_SCHEDULER_NAME: "WarmupMultiStepLR"
+  GAMMA: 0.1
+  # The iteration number to decrease learning rate by GAMMA.
+  STEPS: (1000000,2000000)
+  # The end lr, only used by WarmupCosineLR
+  BASE_LR_END: 0.0
+  # For fixed_gama lr schedule
+  NUM_DECAYS: 0
+
+  # ---- warmup ----
+  WARMUP_FACTOR: 0.001
+  WARMUP_ITERS: 5000
+  WARMUP_METHOD: "linear"
+
+TEST:
+  EVAL_PERIOD: 15000
+  PRE_EVAL: False
+  SAVE_PATH: QP37.npy
+
+
+# 4gpu 64batch test 2080 train 37086
+

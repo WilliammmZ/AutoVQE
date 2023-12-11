@@ -1,0 +1,8 @@
+log
+*AutoVQE.egg-info
+*__pycache__
+*paper_img
+*README_private.md
+*mfqe_video_compression
+
+

@@ -1,0 +1,58 @@
+CUDNN_BENCHMARK: True
+SEED: 2233
+VERSION: 1
+
+DATALOADER:
+  NUM_WORKERS: 12
+
+SOLVER:
+  SAMPLE_PER_BATCH: 64
+  MAX_ITER: 40000
+  CHECKPOINT_PERIOD: 5000
+
+  #---- Optimizer ----
+  BASE_LR : 0.001
+  MOMENTUM : 0.9
+  NESTEROV : False #SGD需要
+  WEIGHT_DECAY : 0.0001
+  FOR_EACH : True #加速for循环，但需要更多的显存
+
+  #---- AMP ----  
+  AMP:
+    ENABLED: false
+
+  #---- Gradient clipping ----
+  CLIP_GRADIENTS:
+    ENABLED: False
+    CLIP_TYPE: "value"
+    #Maximum absolute value used for clipping gradients
+    CLIP_VALUE: 1.0
+    # Floating point number p for L-p norm to be used with the "norm"
+    # gradient clipping type; for L-inf, please specify .inf
+    NORM_TYPE: 2.0
+
+  # ---- lr scheduler ----
+  # Options: WarmupMultiStepLR / WarmupCosineLR / WarmupStepWithFixedGammaLR
+  # See Peach/solver/build.py for definition.
+  LR_SCHEDULER_NAME: "WarmupMultiStepLR"
+  GAMMA: 0.1
+  # The iteration number to decrease learning rate by GAMMA.
+  STEPS: (30000,)
+  # The end lr, only used by WarmupCosineLR
+  BASE_LR_END: 0.0
+  # For fixed_gama lr schedule
+  NUM_DECAYS: 0
+
+  # ---- warmup ----
+  WARMUP_FACTOR: 0.001
+  WARMUP_ITERS: 0
+  WARMUP_METHOD: "linear"
+  RESCALE_INTERVAL: False
+
+TEST:
+  EVAL_PERIOD: 4600
+  PRECISE_BN:
+    ENABLED: false
+    NUM_ITER: 1000
+  PRE_EVAL: false
+  SAVE_PATH: null
