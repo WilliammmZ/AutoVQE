@@ -29,3 +29,7 @@ bash /DATA/jupyter/personal/AutoVQE/run.sh
 2. - [ ] Detailed ReadME
 3. - [ ] Release model weights
 
+
+https://github.com/WilliammmZ/AutoVQE/assets/18674350/c6a78470-f162-454f-9c02-a6cd7b80f57e
+
+
